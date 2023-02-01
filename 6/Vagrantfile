@@ -2,18 +2,25 @@
 # vi: set ft=ruby :
 $script = <<-'SCRIPT'
 apt-get update
-apt-get install -y libreadline-dev 
-apt-get install -y zlib1g-dev
-curl -k https://ftp.postgresql.org/pub/source/v8.4.1/postgresql-8.4.1.tar.gz --output /home/vagrant/postgresql-8.4.1.tar.gz
-cd /home/vagrant/
-tar -xvf /home/vagrant/postgresql-8.4.1.tar.gz
-export CFLAGS=-fno-aggressive-loop-optimizations
-/home/vagrant/postgresql-8.4.1/configure
-make install
-adduser --disabled-password --gecos "" postgres
-mkdir -p /usr/local/pgsql/data
-chown postgres /usr/local/pgsql/data
-sudo -u postgres /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
+apt-get install -y python3
+apt-get install -y python3-pip
+apt-get install -y libpq-dev
+pip3 install django
+pip3 install psycopg2-binary
+
+
+# apt-get install -y libreadline-dev 
+# apt-get install -y zlib1g-dev
+# curl -k https://ftp.postgresql.org/pub/source/v8.4.1/postgresql-8.4.1.tar.gz --output /home/vagrant/postgresql-8.4.1.tar.gz
+# cd /home/vagrant/
+# tar -xvf /home/vagrant/postgresql-8.4.1.tar.gz
+# export CFLAGS=-fno-aggressive-loop-optimizations
+# /home/vagrant/postgresql-8.4.1/configure
+# make install
+# adduser --disabled-password --gecos "" postgres
+# mkdir -p /usr/local/pgsql/data
+# chown postgres /usr/local/pgsql/data
+# sudo -u postgres /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
 SCRIPT
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
@@ -27,7 +34,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "bento/ubuntu-18.04"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -79,6 +86,7 @@ Vagrant.configure("2") do |config|
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: $script
+  config.vm.provision "file", source: "/Users/f1restarter/Documents/skillfactory/vagrant/6/emptyfile.py", destination: "~/"
   #config.vm.provision "shell", inline: <<-SHELL
   # sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
   # wget --no-check-certificate  https://www.postgresql.org/media/keys/ACCC4CF8.asc -P /home/vagrant/
